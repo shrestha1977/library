@@ -1,17 +1,31 @@
 body {
-  font-family: Arial;
-  background: #f9f9f9;
-  padding: 20px;
+  font-family: sans-serif;
+  margin: 20px;
+  background: #f4f4f4;
 }
-
-header {
-  margin-bottom: 20px;
+.header {
+  background: #333;
+  color: white;
+  padding: 15px;
 }
-
-.book-card {
+.book-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.book {
   background: white;
   padding: 15px;
-  margin: 15px 0;
-  border-radius: 10px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  border: 1px solid #ccc;
+  width: 250px;
+  border-radius: 5px;
+}
+.comment {
+  background: #eee;
+  margin: 10px 0;
+  padding: 10px;
+}
+textarea {
+  width: 300px;
+  height: 80px;
 }
