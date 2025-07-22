@@ -1,53 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
   <title>Online Library</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <header>
-    <h1>📖 Online Library</h1>
-    {% if user %}
-      <p>Welcome, {{ user.username }} | <a href="/logout">Logout</a></p>
+  <div class="header">
+    <h1>📚 Online Library</h1>
+    {% if session.get('username') %}
+      <p>Welcome, {{ session['username'] }} | <a href="/logout">Logout</a></p>
     {% else %}
       <a href="/login">Login</a> | <a href="/register">Sign Up</a>
     {% endif %}
+  </div>
 
-    <form method="get" action="/">
-      <input type="text" name="search" placeholder="Search title">
-      <select name="genre">
-        <option value="all">All</option>
-        <option value="Fiction">Fiction</option>
-        <option value="Romance">Romance</option>
-        <option value="Sci-Fi">Sci-Fi</option>
-      </select>
-      <button type="submit">Search</button>
-    </form>
-  </header>
+  <form method="get">
+    <input type="text" name="search" placeholder="Search by title..." />
+    <select name="genre">
+      <option value="">All Genres</option>
+      {% for genre in genres %}
+        <option value="{{ genre[0] }}">{{ genre[0] }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit">Search</button>
+  </form>
 
-  <main>
+  <div class="book-list">
     {% for book in books %}
-    <div class="book-card">
-      <h3>{{ book[1] }}</h3>
-      <p><em>{{ book[2] }}</em></p>
-      <a href="{{ book[3] }}" target="_blank">Read Book</a>
-
-      {% if user %}
-      <form action="/feedback" method="POST">
-        <input type="hidden" name="book_id" value="{{ book[0] }}">
-        <label>⭐ Rating: </label>
-        <input type="number" name="rating" min="1" max="5">
-        <br/>
-        <textarea name="comment" placeholder="Your comment..."></textarea>
-        <br/>
-        <button type="submit">Submit Feedback</button>
-      </form>
-      {% else %}
-      <p><em>Login to rate & comment</em></p>
-      {% endif %}
-    </div>
+      <div class="book">
+        <h3>{{ book[1] }}</h3>
+        <p>Author: {{ book[2] }}</p>
+        <p>Genre: {{ book[3] }}</p>
+        <a href="{{ url_for('book', book_id=book[0]) }}">Read & Comment</a> |
+        <a href="{{ book[4] }}" target="_blank">Open Book</a>
+      </div>
     {% endfor %}
-  </main>
+  </div>
 </body>
 </html>
