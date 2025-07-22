@@ -9,6 +9,7 @@ app.secret_key = 'your_secret_key'
 def init_db():
     conn = sqlite3.connect('library.db')
     c = conn.cursor()
+
     c.execute('''CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT UNIQUE NOT NULL,
@@ -28,8 +29,22 @@ def init_db():
         comment TEXT,
         rating INTEGER
     )''')
+
+    # 🔽 Sample books insertion (only if table is empty)
+    c.execute("SELECT COUNT(*) FROM books")
+    if c.fetchone()[0] == 0:
+        sample_books = [
+            ("The Great Gatsby", "F. Scott Fitzgerald", "Classic", "https://www.gutenberg.org/ebooks/64317"),
+            ("1984", "George Orwell", "Dystopian", "https://www.gutenberg.org/ebooks/7370"),
+            ("To Kill a Mockingbird", "Harper Lee", "Fiction", "#"),
+            ("Pride and Prejudice", "Jane Austen", "Romance", "https://www.gutenberg.org/ebooks/1342"),
+            ("Moby Dick", "Herman Melville", "Adventure", "https://www.gutenberg.org/ebooks/2701"),
+        ]
+        c.executemany("INSERT INTO books (title, author, genre, link) VALUES (?, ?, ?, ?)", sample_books)
+
     conn.commit()
     conn.close()
+
 
 init_db()
 
